@@ -6,15 +6,27 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Camera, Upload, X } from "lucide-react";
 import { scanBarcode } from "@/app/actions/inventory";
 import { ProductForm } from "./ProductForm";
+import type { BarcodeProduct } from "@/types";
 
-// @ts-ignore - Quagga types
+// @ts-expect-error - Quagga types not available
 import Quagga from "quagga";
 
 export function BarcodeScanner() {
   const [isScanning, setIsScanning] = useState(false);
-  const [scannedProduct, setScannedProduct] = useState(null);
+  const [scannedProduct, setScannedProduct] = useState<BarcodeProduct | null>(
+    null
+  );
   const [error, setError] = useState<string | null>(null);
   const scannerRef = useRef<HTMLDivElement>(null);
+
+  // Cleanup effect to stop scanner when component unmounts
+  useEffect(() => {
+    return () => {
+      if (isScanning) {
+        Quagga.stop();
+      }
+    };
+  }, [isScanning]);
 
   const startScanner = async () => {
     setIsScanning(true);
@@ -48,7 +60,7 @@ export function BarcodeScanner() {
             ],
           },
         },
-        (err: any) => {
+        (err: Error | null) => {
           if (err) {
             setError("Failed to initialize camera: " + err.message);
             setIsScanning(false);
@@ -57,8 +69,7 @@ export function BarcodeScanner() {
           Quagga.start();
         }
       );
-
-      Quagga.onDetected(async (result: any) => {
+      Quagga.onDetected(async (result: { codeResult: { code: string } }) => {
         const barcode = result.codeResult.code;
         console.log("Barcode detected:", barcode);
 
@@ -74,11 +85,11 @@ export function BarcodeScanner() {
           } else {
             setError("Product not found. You can still add it manually.");
           }
-        } catch (error) {
+        } catch {
           setError("Failed to scan barcode. Please try again.");
         }
       });
-    } catch (error) {
+    } catch {
       setError("Camera permission denied or not available");
       setIsScanning(false);
     }
@@ -190,7 +201,7 @@ export function BarcodeScanner() {
       <div className="text-center">
         <p className="text-sm text-muted-foreground mb-4">
           Or add an item manually
-        </p>
+        </p>{" "}
         <Button
           variant="outline"
           onClick={() =>
@@ -200,7 +211,7 @@ export function BarcodeScanner() {
               brand: "",
               category: "",
               imageUrl: "",
-              nutritionData: null,
+              nutritionData: undefined,
             })
           }
         >

@@ -24,31 +24,59 @@ export default async function DashboardPage() {
       matches.slice(0, 3)
     ),
   ]);
-
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <div className="text-sm text-muted-foreground">
-          Welcome back, {session.user.name || session.user.email}
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50/50 via-white to-green-50/50">
+      <div className="container mx-auto p-6 space-y-8">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-success bg-clip-text text-transparent">
+              Dashboard
+            </h1>
+            <p className="text-muted-foreground mt-2">
+              Welcome back, {session.user.name || session.user.email}
+            </p>
+          </div>
+          <div className="text-sm text-muted-foreground bg-white/50 backdrop-blur-sm px-4 py-2 rounded-xl border">
+            {new Date().toLocaleDateString('en-US', { 
+              weekday: 'long', 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            })}
+          </div>
+        </div>
+
+        {/* Alert Notifications */}
+        {alerts.length > 0 && (
+          <div className="animate-fade-in">
+            <AlertNotifications alerts={alerts} />
+          </div>
+        )}
+
+        {/* Stats Overview */}
+        <div className="animate-fade-in">
+          <DashboardStats pantryItems={pantryItems} />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Expiry Timeline */}
+          <div className="animate-slide-in">
+            <ExpiryTimeline pantryItems={pantryItems} />
+          </div>
+
+          {/* Recipe Suggestions */}
+          <div className="animate-slide-in">
+            <RecipeSuggestions recipeMatches={recipeMatches} />
+          </div>
+        </div>
+
+        {/* Recent Activity */}
+        <div className="animate-fade-in">
+          <RecentActivity />
         </div>
       </div>
-
-      {/* Alert Notifications */}
-      {alerts.length > 0 && <AlertNotifications alerts={alerts} />}
-
-      {/* Stats Overview */}
-      <DashboardStats pantryItems={pantryItems} />
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Expiry Timeline */}
-        <ExpiryTimeline pantryItems={pantryItems} />
-
-        {/* Recipe Suggestions */}
-        <RecipeSuggestions recipeMatches={recipeMatches} />
-      </div>
-
-      {/* Recent Activity */}
+    </div>
+  );}
       <RecentActivity pantryItems={pantryItems} />
     </div>
   );

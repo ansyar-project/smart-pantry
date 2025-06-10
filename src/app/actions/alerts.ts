@@ -78,11 +78,23 @@ export async function processExpiryAlerts() {
 }
 
 async function createExpiryAlert(
-  item: any,
+  item: {
+    id: string;
+    name: string;
+    brand?: string | null;
+    quantity: number;
+    unit: string;
+    location?: string | null;
+    expiryDate: Date | null;
+    userId: string;
+    user: {
+      email: string;
+    };
+  },
   type: "EXPIRY_WARNING" | "EXPIRY_URGENT"
 ) {
   const daysUntilExpiry = Math.ceil(
-    (new Date(item.expiryDate).getTime() - new Date().getTime()) /
+    (new Date(item.expiryDate!).getTime() - new Date().getTime()) /
       (1000 * 60 * 60 * 24)
   );
 
@@ -95,7 +107,6 @@ async function createExpiryAlert(
     type === "EXPIRY_URGENT"
       ? `Your ${item.name} expires tomorrow. Use it soon or consider adding it to a recipe!`
       : `Your ${item.name} expires in ${daysUntilExpiry} days. Plan to use it soon.`;
-
   const alert = await prisma.alert.create({
     data: {
       userId: item.userId,
@@ -109,7 +120,14 @@ async function createExpiryAlert(
 
   // Send notification
   try {
-    await sendExpiryAlert(item.user.email, item, alert);
+    await sendExpiryAlert(item.user.email, {
+      name: item.name,
+      expiryDate: item.expiryDate,
+      brand: item.brand || undefined,
+      quantity: item.quantity,
+      unit: item.unit,
+      location: item.location || undefined,
+    });
   } catch (error) {
     console.error("Error sending notification:", error);
   }

@@ -2,10 +2,12 @@ import { NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
+import { getServerSession } from "next-auth/next";
 import { prisma } from "./prisma";
+import type { Adapter } from "next-auth/adapters";
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma) as any,
+  adapter: PrismaAdapter(prisma) as Adapter,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -48,5 +50,5 @@ export const authOptions: NextAuthOptions = {
   },
 };
 
-// Export auth function for server actions
-export { auth } from "next-auth";
+// Create auth function for server actions
+export const auth = async () => getServerSession(authOptions);

@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { BarcodeScanner } from "@/components/scanner/BarcodeScanner";
-import { ProductForm } from "@/components/scanner/ProductForm";
 
 export default async function ScanPage() {
   const session = await auth();

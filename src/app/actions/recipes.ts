@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { Prisma, RecipeCategory, Difficulty } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
@@ -9,6 +10,7 @@ import type {
   RecipeSearchQuery,
   RecipeMatch,
   MealPlanSuggestion,
+  PantryItem,
 } from "@/types";
 
 export async function createRecipe(data: CreateRecipeInput) {
@@ -47,9 +49,8 @@ export async function searchRecipes(query: RecipeSearchQuery) {
   if (!session?.user?.id) {
     redirect("/auth/signin");
   }
-
   try {
-    const where: any = {
+    const where: Prisma.RecipeWhereInput = {
       OR: [{ isPublic: true }, { userId: session.user.id }],
     };
 
@@ -60,13 +61,12 @@ export async function searchRecipes(query: RecipeSearchQuery) {
         { cuisine: { contains: query.query, mode: "insensitive" } },
       ];
     }
-
     if (query.category) {
-      where.category = query.category;
+      where.category = query.category as RecipeCategory;
     }
 
     if (query.difficulty) {
-      where.difficulty = query.difficulty;
+      where.difficulty = query.difficulty as Difficulty;
     }
 
     if (query.maxPrepTime) {
@@ -105,7 +105,7 @@ export async function searchRecipes(query: RecipeSearchQuery) {
 }
 
 export async function findMatchingRecipes(
-  pantryItems: any[]
+  pantryItems: PantryItem[]
 ): Promise<RecipeMatch[]> {
   const session = await auth();
   if (!session?.user?.id) {

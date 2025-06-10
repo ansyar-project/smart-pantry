@@ -1,7 +1,6 @@
 import nodemailer from "nodemailer";
-import type { NotificationPayload } from "@/types";
 
-const transporter = nodemailer.createTransporter({
+const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT),
   secure: false,
@@ -26,9 +25,19 @@ export async function sendEmail(to: string, subject: string, html: string) {
   }
 }
 
-export async function sendExpiryAlert(email: string, item: any, alert?: any) {
+export async function sendExpiryAlert(
+  email: string,
+  item: {
+    name: string;
+    expiryDate: Date | null;
+    brand?: string;
+    quantity: number;
+    unit: string;
+    location?: string;
+  }
+) {
   const daysUntilExpiry = Math.ceil(
-    (new Date(item.expiryDate).getTime() - new Date().getTime()) /
+    (new Date(item.expiryDate!).getTime() - new Date().getTime()) /
       (1000 * 60 * 60 * 24)
   );
 
@@ -47,10 +56,9 @@ export async function sendExpiryAlert(email: string, item: any, alert?: any) {
           item.brand
             ? `<p style="margin: 5px 0; color: #666;">Brand: ${item.brand}</p>`
             : ""
-        }
-        <p style="margin: 5px 0;"><strong>Expires:</strong> ${new Date(
-          item.expiryDate
-        ).toLocaleDateString()}</p>
+        }        <p style="margin: 5px 0;"><strong>Expires:</strong> ${new Date(
+    item.expiryDate!
+  ).toLocaleDateString()}</p>
         <p style="margin: 5px 0;"><strong>Quantity:</strong> ${item.quantity} ${
     item.unit
   }</p>
@@ -88,7 +96,15 @@ export async function sendExpiryAlert(email: string, item: any, alert?: any) {
 
 export async function sendRecipeSuggestion(
   email: string,
-  recipe: any,
+  recipe: {
+    id: string;
+    name: string;
+    description?: string;
+    cuisine?: string;
+    difficulty?: string;
+    imageUrl?: string;
+    prepTime?: number;
+  },
   matchPercentage: number
 ) {
   const subject = `🍳 Recipe suggestion: ${recipe.name} (${Math.round(
@@ -151,13 +167,21 @@ export async function sendRecipeSuggestion(
 
 export async function sendShoppingListReminder(
   email: string,
-  shoppingList: any
+  shoppingList: {
+    name: string;
+    items: Array<{
+      name: string;
+      quantity: number;
+      unit: string;
+      isCompleted: boolean;
+    }>;
+  }
 ) {
   const subject = `🛒 Shopping reminder: ${shoppingList.name}`;
 
   const itemsList = shoppingList.items
-    .filter((item: any) => !item.isCompleted)
-    .map((item: any) => `<li>${item.quantity} ${item.unit} ${item.name}</li>`)
+    .filter((item) => !item.isCompleted)
+    .map((item) => `<li>${item.quantity} ${item.unit} ${item.name}</li>`)
     .join("");
 
   const html = `

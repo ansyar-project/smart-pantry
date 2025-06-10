@@ -16,37 +16,62 @@ export function ExpiryTimeline({ pantryItems }: ExpiryTimelineProps) {
         new Date(a.expiryDate!).getTime() - new Date(b.expiryDate!).getTime()
     )
     .slice(0, 8); // Show next 8 items
-
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Clock className="h-5 w-5" />
-          Expiry Timeline
+    <Card className="border-0 shadow-lg bg-white/50 backdrop-blur-sm">
+      <CardHeader className="pb-4">
+        <CardTitle className="flex items-center gap-3 text-xl">
+          <div className="h-10 w-10 bg-gradient-to-br from-warning to-orange-500 rounded-xl flex items-center justify-center">
+            <Clock className="h-5 w-5 text-white" />
+          </div>
+          <span>Expiry Timeline</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
         {itemsWithExpiry.length === 0 ? (
-          <p className="text-muted-foreground text-center py-4">
-            No items with expiry dates
-          </p>
+          <div className="text-center py-8">
+            <div className="h-16 w-16 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Clock className="h-8 w-8 text-muted-foreground" />
+            </div>
+            <p className="text-muted-foreground">No items with expiry dates</p>
+          </div>
         ) : (
-          <div className="space-y-3">
-            {itemsWithExpiry.map((item) => {
+          <div className="space-y-4">
+            {itemsWithExpiry.map((item, index) => {
               const daysUntil = getDaysUntilExpiry(item.expiryDate!);
               const status = getExpiryStatus(item.expiryDate!);
 
               return (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-3 rounded-lg border"
+                  className="flex items-center justify-between p-4 rounded-xl border-0 bg-white/80 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-300 group"
+                  style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  <div className="flex items-center gap-3">
-                    {status === "expired" && (
-                      <AlertTriangle className="h-4 w-4 text-red-500" />
-                    )}
+                  <div className="flex items-center gap-4">
+                    <div
+                      className={`h-12 w-12 rounded-xl flex items-center justify-center ${
+                        status === "expired"
+                          ? "bg-destructive/10"
+                          : status === "expiring-soon"
+                          ? "bg-warning/10"
+                          : "bg-success/10"
+                      } group-hover:scale-110 transition-transform duration-300`}
+                    >
+                      {status === "expired" ? (
+                        <AlertTriangle className="h-5 w-5 text-destructive" />
+                      ) : (
+                        <Clock
+                          className={`h-5 w-5 ${
+                            status === "expiring-soon"
+                              ? "text-warning"
+                              : "text-success"
+                          }`}
+                        />
+                      )}
+                    </div>
                     <div>
-                      <p className="font-medium">{item.name}</p>
+                      <p className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                        {item.name}
+                      </p>
                       <p className="text-sm text-muted-foreground">
                         {item.brand && `${item.brand} • `}
                         {item.quantity} {item.unit}
@@ -63,6 +88,7 @@ export function ExpiryTimeline({ pantryItems }: ExpiryTimelineProps) {
                           ? "secondary"
                           : "outline"
                       }
+                      className="mb-2 shadow-sm"
                     >
                       {status === "expired"
                         ? "Expired"
@@ -72,7 +98,7 @@ export function ExpiryTimeline({ pantryItems }: ExpiryTimelineProps) {
                         ? "Tomorrow"
                         : `${daysUntil} days`}
                     </Badge>
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p className="text-xs text-muted-foreground">
                       {formatDate(item.expiryDate!)}
                     </p>
                   </div>

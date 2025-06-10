@@ -37,14 +37,14 @@ export function ProductForm({ initialData }: ProductFormProps) {
       const result = await addPantryItem({
         ...formData,
         pantryId: "default", // For now, using default pantry
-        price: formData.price ? parseFloat(formData.price) : undefined,
-        expiryDate: formData.expiryDate
-          ? new Date(formData.expiryDate)
-          : undefined,
+        price: formData.price ? parseFloat(formData.price) : null,
+        expiryDate: formData.expiryDate ? new Date(formData.expiryDate) : null,
         purchaseDate: formData.purchaseDate
           ? new Date(formData.purchaseDate)
-          : undefined,
-        nutritionData: initialData?.nutritionData || undefined,
+          : null,
+        nutritionData: initialData?.nutritionData || null,
+        openedDate: null,
+        currency: "USD",
       });
 
       if (result.success) {
@@ -52,14 +52,13 @@ export function ProductForm({ initialData }: ProductFormProps) {
       } else {
         alert("Failed to add item: " + result.error);
       }
-    } catch (error) {
+    } catch {
       alert("An error occurred while adding the item");
     } finally {
       setIsLoading(false);
     }
   };
-
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string | number | Date) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 

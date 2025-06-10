@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { Prisma, FoodCategory, StorageLocation } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
@@ -48,12 +49,13 @@ export async function addPantryItem(data: CreatePantryItemInput) {
   if (!session?.user?.id) {
     redirect("/auth/signin");
   }
-
   try {
+    const { nutritionData, ...restData } = data;
     const pantryItem = await prisma.pantryItem.create({
       data: {
-        ...data,
+        ...restData,
         userId: session.user.id,
+        nutritionData: nutritionData as Prisma.InputJsonValue, // Type assertion for JsonValue compatibility
       },
       include: {
         user: true,
@@ -79,14 +81,19 @@ export async function updatePantryItem(
   if (!session?.user?.id) {
     redirect("/auth/signin");
   }
-
   try {
+    const { nutritionData, ...restData } = data;
     const pantryItem = await prisma.pantryItem.update({
       where: {
         id,
         userId: session.user.id, // Ensure user owns the item
       },
-      data,
+      data: {
+        ...restData,
+        ...(nutritionData !== undefined && {
+          nutritionData: nutritionData as Prisma.InputJsonValue,
+        }),
+      },
       include: {
         user: true,
         pantry: true,
@@ -185,22 +192,20 @@ export async function getPantryItems(
   if (!session?.user?.id) {
     redirect("/auth/signin");
   }
-
   try {
-    const where: any = {
+    const where: Prisma.PantryItemWhereInput = {
       userId: session.user.id,
     };
 
     if (pantryId) {
       where.pantryId = pantryId;
     }
-
     if (filters?.category) {
-      where.category = filters.category;
+      where.category = filters.category as FoodCategory;
     }
 
     if (filters?.location) {
-      where.location = filters.location;
+      where.location = filters.location as StorageLocation;
     }
 
     if (filters?.search) {
@@ -209,10 +214,11 @@ export async function getPantryItems(
         { brand: { contains: filters.search, mode: "insensitive" } },
       ];
     }
-
     const items = await prisma.pantryItem.findMany({
       where,
       include: {
+        user: true,
+        pantry: true,
         alerts: true,
         usageHistory: true,
       },

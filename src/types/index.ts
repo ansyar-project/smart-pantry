@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 
 // User types
-export type User = Prisma.UserGetPayload<{}>;
+export type User = Prisma.UserGetPayload<Record<string, never>>;
 export type UserWithRelations = Prisma.UserGetPayload<{
   include: {
     pantryItems: true;
@@ -13,7 +13,7 @@ export type UserWithRelations = Prisma.UserGetPayload<{
 }>;
 
 // Pantry types
-export type Pantry = Prisma.PantryGetPayload<{}>;
+export type Pantry = Prisma.PantryGetPayload<Record<string, never>>;
 export type PantryWithMembers = Prisma.PantryGetPayload<{
   include: {
     members: {
@@ -25,7 +25,7 @@ export type PantryWithMembers = Prisma.PantryGetPayload<{
   };
 }>;
 
-export type PantryItem = Prisma.PantryItemGetPayload<{}>;
+export type PantryItem = Prisma.PantryItemGetPayload<Record<string, never>>;
 export type PantryItemWithRelations = Prisma.PantryItemGetPayload<{
   include: {
     user: true;
@@ -36,7 +36,7 @@ export type PantryItemWithRelations = Prisma.PantryItemGetPayload<{
 }>;
 
 // Recipe types
-export type Recipe = Prisma.RecipeGetPayload<{}>;
+export type Recipe = Prisma.RecipeGetPayload<Record<string, never>>;
 export type RecipeWithIngredients = Prisma.RecipeGetPayload<{
   include: {
     ingredients: true;
@@ -45,10 +45,12 @@ export type RecipeWithIngredients = Prisma.RecipeGetPayload<{
   };
 }>;
 
-export type RecipeIngredient = Prisma.RecipeIngredientGetPayload<{}>;
+export type RecipeIngredient = Prisma.RecipeIngredientGetPayload<
+  Record<string, never>
+>;
 
 // Alert types
-export type Alert = Prisma.AlertGetPayload<{}>;
+export type Alert = Prisma.AlertGetPayload<Record<string, never>>;
 export type AlertWithItem = Prisma.AlertGetPayload<{
   include: {
     pantryItem: true;
@@ -56,17 +58,17 @@ export type AlertWithItem = Prisma.AlertGetPayload<{
 }>;
 
 // Shopping types
-export type ShoppingList = Prisma.ShoppingListGetPayload<{}>;
+export type ShoppingList = Prisma.ShoppingListGetPayload<Record<string, never>>;
 export type ShoppingListWithItems = Prisma.ShoppingListGetPayload<{
   include: {
     items: true;
   };
 }>;
 
-export type ShoppingItem = Prisma.ShoppingItemGetPayload<{}>;
+export type ShoppingItem = Prisma.ShoppingItemGetPayload<Record<string, never>>;
 
 // Meal Planning types
-export type MealPlan = Prisma.MealPlanGetPayload<{}>;
+export type MealPlan = Prisma.MealPlanGetPayload<Record<string, never>>;
 export type MealPlanWithRecipes = Prisma.MealPlanGetPayload<{
   include: {
     recipes: {
@@ -82,15 +84,17 @@ export type MealPlanWithRecipes = Prisma.MealPlanGetPayload<{
 }>;
 
 // Analytics types
-export type ItemUsage = Prisma.ItemUsageGetPayload<{}>;
-export type RecipeRating = Prisma.RecipeRatingGetPayload<{}>;
+export type ItemUsage = Prisma.ItemUsageGetPayload<Record<string, never>>;
+export type RecipeRating = Prisma.RecipeRatingGetPayload<Record<string, never>>;
 
 // Input types for forms
 export type CreatePantryItemInput = Omit<
   PantryItem,
-  "id" | "createdAt" | "updatedAt"
+  "id" | "createdAt" | "updatedAt" | "userId"
 >;
-export type UpdatePantryItemInput = Partial<CreatePantryItemInput>;
+export type UpdatePantryItemInput = Partial<
+  Omit<CreatePantryItemInput, "pantryId">
+>;
 
 export type CreateRecipeInput = Omit<
   Recipe,
@@ -165,7 +169,7 @@ export interface NotificationPayload {
   title: string;
   message: string;
   type: "expiry" | "low-stock" | "recipe-suggestion" | "system";
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
 }
 
 // Barcode API response
@@ -175,5 +179,5 @@ export interface BarcodeProduct {
   brand?: string;
   category?: string;
   imageUrl?: string;
-  nutritionData?: Record<string, any>;
+  nutritionData?: Record<string, unknown>;
 }
