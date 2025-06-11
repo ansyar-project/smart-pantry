@@ -57,12 +57,13 @@ export function DashboardStats({ pantryItems }: DashboardStatsProps) {
       bgColor: "bg-success/10",
     },
   ];
-
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
         <div className="h-2 w-2 bg-primary rounded-full"></div>
-        <h2 className="text-2xl font-bold text-foreground">Overview</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Overview
+        </h2>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -71,17 +72,18 @@ export function DashboardStats({ pantryItems }: DashboardStatsProps) {
           return (
             <Card
               key={stat.title}
-              className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 group hover:scale-105 bg-white/50 backdrop-blur-sm"
+              className="border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 group hover:scale-105 bg-white dark:bg-gray-800/95 backdrop-blur-sm"
               style={{ animationDelay: `${index * 100}ms` }}
             >
+              {" "}
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-                <CardTitle className="text-sm font-semibold text-muted-foreground">
+                <CardTitle className="text-sm font-bold text-gray-700 dark:text-gray-200">
                   {stat.title}
                 </CardTitle>
                 <div
                   className={`h-12 w-12 ${stat.bgColor} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
                 >
-                  <Icon className="h-6 w-6 text-foreground" />
+                  <Icon className="h-6 w-6 text-gray-700 dark:text-gray-200" />
                 </div>
               </CardHeader>
               <CardContent>
@@ -90,7 +92,7 @@ export function DashboardStats({ pantryItems }: DashboardStatsProps) {
                 >
                   {stat.value}
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-gray-600 dark:text-gray-300 font-semibold">
                   {stat.description}
                 </p>
               </CardContent>

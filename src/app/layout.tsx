@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Providers } from "@/components/providers/Providers";
+import { MainNavigation } from "@/components/navigation/MainNavigation";
+import { ScanFAB } from "@/components/navigation/ScanFAB";
+import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -80,11 +84,12 @@ export const metadata: Metadata = {
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-  },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({
@@ -97,7 +102,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Providers>
+          <div className="min-h-screen bg-background">
+            <MainNavigation />
+            <main className="pb-20 md:pb-6">{children}</main>
+            <ScanFAB />
+            <BottomNavigation />
+          </div>
+        </Providers>
       </body>
     </html>
   );

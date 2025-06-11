@@ -5,6 +5,7 @@ import { Prisma, FoodCategory, StorageLocation } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { getOrCreateDefaultPantry } from "@/lib/pantry";
 import type {
   CreatePantryItemInput,
   UpdatePantryItemInput,
@@ -193,13 +194,18 @@ export async function getPantryItems(
     redirect("/auth/signin");
   }
   try {
+    // If no pantryId specified, get the default pantry
+    let targetPantryId = pantryId;
+    if (!targetPantryId) {
+      const defaultPantry = await getOrCreateDefaultPantry();
+      targetPantryId = defaultPantry.id;
+    }
+
     const where: Prisma.PantryItemWhereInput = {
       userId: session.user.id,
+      pantryId: targetPantryId,
     };
 
-    if (pantryId) {
-      where.pantryId = pantryId;
-    }
     if (filters?.category) {
       where.category = filters.category as FoodCategory;
     }

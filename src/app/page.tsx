@@ -338,9 +338,9 @@ export default async function HomePage() {
                 ))}
               </div>
               <blockquote className="text-white/90 text-lg italic mb-3">
-                "Smart Pantry has completely transformed how we manage food in
-                our household. We've cut our food waste in half and discovered
-                so many new recipes!"
+                &ldquo;Smart Pantry has completely transformed how we manage
+                food in our household. We&apos;ve cut our food waste in half and
+                discovered so many new recipes!&rdquo;
               </blockquote>
               <cite className="text-white/70 text-sm">
                 — Sarah M., Family of 4

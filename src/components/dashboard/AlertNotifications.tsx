@@ -23,7 +23,9 @@ export function AlertNotifications({ alerts }: AlertNotificationsProps) {
     <div className="space-y-3">
       <div className="flex items-center gap-2 mb-4">
         <div className="h-2 w-2 bg-destructive rounded-full animate-pulse"></div>
-        <h2 className="text-lg font-semibold text-foreground">Active Alerts</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+          Active Alerts
+        </h2>
         <Badge variant="destructive" className="ml-auto">
           {alerts.length} alert{alerts.length !== 1 ? "s" : ""}
         </Badge>
@@ -32,12 +34,12 @@ export function AlertNotifications({ alerts }: AlertNotificationsProps) {
       {alerts.map((alert, index) => (
         <Card
           key={alert.id}
-          className={`border-0 shadow-lg transition-all duration-300 hover:shadow-xl overflow-hidden animate-fade-in ${
+          className={`border shadow-lg transition-all duration-300 hover:shadow-xl overflow-hidden animate-fade-in ${
             alert.priority === "HIGH" || alert.priority === "URGENT"
-              ? "bg-gradient-to-r from-destructive/5 to-red-50 border-l-4 border-l-destructive"
+              ? "bg-gradient-to-r from-red-50 to-red-25 dark:from-red-950/30 dark:to-red-900/20 border-l-4 border-l-destructive border-red-200 dark:border-red-800"
               : alert.priority === "MEDIUM"
-              ? "bg-gradient-to-r from-warning/5 to-orange-50 border-l-4 border-l-warning"
-              : "bg-gradient-to-r from-info/5 to-blue-50 border-l-4 border-l-info"
+              ? "bg-gradient-to-r from-orange-50 to-orange-25 dark:from-orange-950/30 dark:to-orange-900/20 border-l-4 border-l-warning border-orange-200 dark:border-orange-800"
+              : "bg-gradient-to-r from-blue-50 to-blue-25 dark:from-blue-950/30 dark:to-blue-900/20 border-l-4 border-l-info border-blue-200 dark:border-blue-800"
           }`}
           style={{ animationDelay: `${index * 100}ms` }}
         >
@@ -63,7 +65,7 @@ export function AlertNotifications({ alerts }: AlertNotificationsProps) {
 
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h4 className="font-semibold text-foreground">
+                    <h4 className="font-semibold text-gray-900 dark:text-white">
                       {alert.title}
                     </h4>
                     <Badge
@@ -78,9 +80,9 @@ export function AlertNotifications({ alerts }: AlertNotificationsProps) {
                     </Badge>
                     {!alert.isRead && (
                       <div className="h-2 w-2 bg-primary rounded-full"></div>
-                    )}
+                    )}{" "}
                   </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
                     {alert.message}
                   </p>
                 </div>

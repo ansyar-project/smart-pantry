@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  getProviders,
-  signIn,
-  getSession,
-  getCsrfToken,
-} from "next-auth/react";
+import { getProviders, signIn, getCsrfToken } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";

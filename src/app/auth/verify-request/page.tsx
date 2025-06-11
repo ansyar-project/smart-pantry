@@ -14,7 +14,6 @@ import { CheckCircle, Mail } from "lucide-react";
 
 export default function VerifyRequest() {
   const searchParams = useSearchParams();
-  const provider = searchParams.get("provider");
   const type = searchParams.get("type");
 
   return (
@@ -42,13 +41,15 @@ export default function VerifyRequest() {
               <ul className="mt-2 list-disc list-inside space-y-1">
                 <li>Check your email inbox (and spam folder)</li>
                 <li>Click the sign-in link in the email</li>
-                <li>You'll be automatically signed in</li>
+                <li>You&apos;ll be automatically signed in</li>
               </ul>
             </div>
           </div>
 
           <div className="text-center space-y-2">
-            <p className="text-sm text-gray-600">Didn't receive the email?</p>
+            <p className="text-sm text-gray-600">
+              Didn&apos;t receive the email?
+            </p>
             <Button variant="outline" asChild>
               <Link href="/auth/signin">Try signing in again</Link>
             </Button>

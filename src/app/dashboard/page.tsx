@@ -8,6 +8,7 @@ import { ExpiryTimeline } from "@/components/dashboard/ExpiryTimeline";
 import { RecipeSuggestions } from "@/components/dashboard/RecipeSuggestions";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { AlertNotifications } from "@/components/dashboard/AlertNotifications";
+import { QuickActions } from "@/components/dashboard/QuickActions";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -25,59 +26,53 @@ export default async function DashboardPage() {
     ),
   ]);
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50/50 via-white to-green-50/50">
-      <div className="container mx-auto p-6 space-y-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-success bg-clip-text text-transparent">
-              Dashboard
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              Welcome back, {session.user.name || session.user.email}
-            </p>
-          </div>
-          <div className="text-sm text-muted-foreground bg-white/50 backdrop-blur-sm px-4 py-2 rounded-xl border">
-            {new Date().toLocaleDateString('en-US', { 
-              weekday: 'long', 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric' 
-            })}
-          </div>
+    <div className="container mx-auto p-6 space-y-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+            Dashboard
+          </h1>
+          <p className="text-gray-800 dark:text-gray-200 mt-2 font-semibold text-lg">
+            Welcome back, {session.user.name || session.user.email}
+          </p>
         </div>
-
-        {/* Alert Notifications */}
-        {alerts.length > 0 && (
-          <div className="animate-fade-in">
-            <AlertNotifications alerts={alerts} />
-          </div>
-        )}
-
-        {/* Stats Overview */}
-        <div className="animate-fade-in">
-          <DashboardStats pantryItems={pantryItems} />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Expiry Timeline */}
-          <div className="animate-slide-in">
-            <ExpiryTimeline pantryItems={pantryItems} />
-          </div>
-
-          {/* Recipe Suggestions */}
-          <div className="animate-slide-in">
-            <RecipeSuggestions recipeMatches={recipeMatches} />
-          </div>
-        </div>
-
-        {/* Recent Activity */}
-        <div className="animate-fade-in">
-          <RecentActivity />
+        <div className="text-sm text-gray-800 dark:text-gray-200 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-600 shadow-md font-medium">
+          {new Date().toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
         </div>
       </div>
-    </div>
-  );}
-      <RecentActivity pantryItems={pantryItems} />
+      {/* Alert Notifications */}
+      {alerts.length > 0 && (
+        <div className="animate-fade-in">
+          <AlertNotifications alerts={alerts} />
+        </div>
+      )}{" "}
+      {/* Stats Overview */}
+      <div className="animate-fade-in">
+        <DashboardStats pantryItems={pantryItems} />
+      </div>
+      {/* Quick Actions */}
+      <div className="animate-fade-in">
+        <QuickActions />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Expiry Timeline */}
+        <div className="animate-slide-in">
+          <ExpiryTimeline pantryItems={pantryItems} />
+        </div>
+        {/* Recipe Suggestions */}
+        <div className="animate-slide-in">
+          <RecipeSuggestions recipeMatches={recipeMatches} />
+        </div>{" "}
+      </div>{" "}
+      {/* Recent Activity */}
+      <div className="animate-fade-in">
+        <RecentActivity pantryItems={pantryItems} />
+      </div>
     </div>
   );
 }

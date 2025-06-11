@@ -9,7 +9,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,10 +19,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { addPantryItem } from "@/app/actions/inventory";
-import { getOrCreateDefaultPantry } from "@/lib/pantry";
-import { Plus, Loader2 } from "lucide-react";
+import { updatePantryItem } from "@/app/actions/inventory";
+import { Loader2 } from "lucide-react";
 import { FoodCategory, StorageLocation } from "@prisma/client";
+import { PantryItemWithRelations } from "@/types";
 
 const FOOD_CATEGORIES = [
   { value: "PRODUCE", label: "Produce" },
@@ -51,11 +50,17 @@ const STORAGE_LOCATIONS = [
   { value: "OTHER", label: "Other" },
 ];
 
+interface EditItemDialogProps {
+  item: PantryItemWithRelations;
+  isOpen: boolean;
+  onCloseAction: () => void;
+}
+
 interface FormData {
   name: string;
   brand: string;
-  category: FoodCategory | "";
-  location: StorageLocation | "";
+  category: FoodCategory;
+  location: StorageLocation;
   quantity: string;
   unit: string;
   expiryDate: string;
@@ -64,40 +69,45 @@ interface FormData {
   notes: string;
 }
 
-export function AddItemButton() {
+export function EditItemDialog({
+  item,
+  isOpen,
+  onCloseAction,
+}: EditItemDialogProps) {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<FormData>({
-    name: "",
-    brand: "",
-    category: "",
-    location: "",
-    quantity: "",
-    unit: "pieces",
-    expiryDate: "",
-    purchaseDate: "",
-    price: "",
-    notes: "",
+    name: item.name,
+    brand: item.brand || "",
+    category: item.category,
+    location: item.location,
+    quantity: item.quantity.toString(),
+    unit: item.unit,
+    expiryDate: item.expiryDate
+      ? new Date(item.expiryDate).toISOString().split("T")[0]
+      : "",
+    purchaseDate: item.purchaseDate
+      ? new Date(item.purchaseDate).toISOString().split("T")[0]
+      : "",
+    price: item.price?.toString() || "",
+    notes: item.notes || "",
   });
 
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.category || !formData.quantity) return;
 
     setIsLoading(true);
     try {
-      // Get or create default pantry
-      const pantry = await getOrCreateDefaultPantry();
-
-      const itemData = {
+      const updateData = {
         name: formData.name,
         brand: formData.brand || undefined,
-        category: formData.category as FoodCategory,
-        location: (formData.location as StorageLocation) || "PANTRY",
+        category: formData.category,
+        location: formData.location,
         quantity: parseFloat(formData.quantity),
         unit: formData.unit,
         expiryDate: formData.expiryDate
@@ -108,58 +118,37 @@ export function AddItemButton() {
           : undefined,
         price: formData.price ? parseFloat(formData.price) : undefined,
         notes: formData.notes || undefined,
-        pantryId: pantry.id,
       };
 
-      const result = await addPantryItem(itemData);
-
+      const result = await updatePantryItem(item.id, updateData);
       if (result.success) {
-        setIsOpen(false);
-        setFormData({
-          name: "",
-          brand: "",
-          category: "",
-          location: "",
-          quantity: "",
-          unit: "pieces",
-          expiryDate: "",
-          purchaseDate: "",
-          price: "",
-          notes: "",
-        });
+        onCloseAction();
         router.refresh();
       } else {
-        console.error("Failed to add item:", result.error);
+        console.error("Failed to update item:", result.error);
       }
     } catch (error) {
-      console.error("Error adding item:", error);
+      console.error("Error updating item:", error);
     } finally {
       setIsLoading(false);
     }
   };
-
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Add Item
-        </Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onCloseAction}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Add New Pantry Item</DialogTitle>
+          <DialogTitle>Edit Item</DialogTitle>
           <DialogDescription>
-            Add a new item to your pantry inventory.
+            Update the details of your pantry item.
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Name *</Label>
+              <Label htmlFor="edit-name">Name *</Label>
               <Input
-                id="name"
+                id="edit-name"
                 value={formData.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
                 placeholder="e.g., Milk, Bread"
@@ -168,9 +157,9 @@ export function AddItemButton() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="brand">Brand</Label>
+              <Label htmlFor="edit-brand">Brand</Label>
               <Input
-                id="brand"
+                id="edit-brand"
                 value={formData.brand}
                 onChange={(e) => handleInputChange("brand", e.target.value)}
                 placeholder="e.g., Organic Valley"
@@ -180,13 +169,13 @@ export function AddItemButton() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="category">Category *</Label>
+              <Label htmlFor="edit-category">Category *</Label>
               <Select
                 value={formData.category}
                 onValueChange={(value) => handleInputChange("category", value)}
                 required
               >
-                <SelectTrigger id="category">
+                <SelectTrigger id="edit-category">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -200,12 +189,12 @@ export function AddItemButton() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="location">Storage Location</Label>
+              <Label htmlFor="edit-location">Storage Location</Label>
               <Select
                 value={formData.location}
                 onValueChange={(value) => handleInputChange("location", value)}
               >
-                <SelectTrigger id="location">
+                <SelectTrigger id="edit-location">
                   <SelectValue placeholder="Select location" />
                 </SelectTrigger>
                 <SelectContent>
@@ -221,9 +210,9 @@ export function AddItemButton() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="quantity">Quantity *</Label>
+              <Label htmlFor="edit-quantity">Quantity *</Label>
               <Input
-                id="quantity"
+                id="edit-quantity"
                 type="number"
                 step="0.1"
                 min="0"
@@ -235,9 +224,9 @@ export function AddItemButton() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="unit">Unit</Label>
+              <Label htmlFor="edit-unit">Unit</Label>
               <Input
-                id="unit"
+                id="edit-unit"
                 value={formData.unit}
                 onChange={(e) => handleInputChange("unit", e.target.value)}
                 placeholder="e.g., pieces, lbs, cups"
@@ -247,9 +236,9 @@ export function AddItemButton() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="purchaseDate">Purchase Date</Label>
+              <Label htmlFor="edit-purchaseDate">Purchase Date</Label>
               <Input
-                id="purchaseDate"
+                id="edit-purchaseDate"
                 type="date"
                 value={formData.purchaseDate}
                 onChange={(e) =>
@@ -259,9 +248,9 @@ export function AddItemButton() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="expiryDate">Expiry Date</Label>
+              <Label htmlFor="edit-expiryDate">Expiry Date</Label>
               <Input
-                id="expiryDate"
+                id="edit-expiryDate"
                 type="date"
                 value={formData.expiryDate}
                 onChange={(e) =>
@@ -272,9 +261,9 @@ export function AddItemButton() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="price">Price ($)</Label>
+            <Label htmlFor="edit-price">Price ($)</Label>
             <Input
-              id="price"
+              id="edit-price"
               type="number"
               step="0.01"
               min="0"
@@ -285,9 +274,9 @@ export function AddItemButton() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="notes">Notes</Label>
+            <Label htmlFor="edit-notes">Notes</Label>
             <Input
-              id="notes"
+              id="edit-notes"
               value={formData.notes}
               onChange={(e) => handleInputChange("notes", e.target.value)}
               placeholder="Additional notes..."
@@ -295,10 +284,11 @@ export function AddItemButton() {
           </div>
 
           <div className="flex gap-2 pt-4">
+            {" "}
             <Button
               type="button"
               variant="outline"
-              onClick={() => setIsOpen(false)}
+              onClick={onCloseAction}
               className="flex-1"
             >
               Cancel
@@ -314,7 +304,7 @@ export function AddItemButton() {
               className="flex-1"
             >
               {isLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-              Add Item
+              Update Item
             </Button>
           </div>
         </form>

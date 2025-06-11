@@ -54,13 +54,23 @@ export async function searchRecipes(query: RecipeSearchQuery) {
       OR: [{ isPublic: true }, { userId: session.user.id }],
     };
 
+    // Handle text search across multiple fields
     if (query.query) {
-      where.OR = [
-        { name: { contains: query.query, mode: "insensitive" } },
-        { description: { contains: query.query, mode: "insensitive" } },
-        { cuisine: { contains: query.query, mode: "insensitive" } },
+      where.AND = [
+        where.OR ? { OR: where.OR } : {},
+        {
+          OR: [
+            { name: { contains: query.query, mode: "insensitive" } },
+            { description: { contains: query.query, mode: "insensitive" } },
+            { cuisine: { contains: query.query, mode: "insensitive" } },
+            { tags: { hasSome: [query.query] } },
+          ],
+        },
       ];
+      // Remove the original OR to avoid conflicts
+      delete where.OR;
     }
+
     if (query.category) {
       where.category = query.category as RecipeCategory;
     }
@@ -92,9 +102,7 @@ export async function searchRecipes(query: RecipeSearchQuery) {
         ratings: true,
         user: true,
       },
-      orderBy: {
-        rating: "desc",
-      },
+      orderBy: [{ rating: "desc" }, { createdAt: "desc" }],
     });
 
     return recipes;
