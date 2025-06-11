@@ -1,0 +1,9 @@
+<!-- This is a placeholder for the Open Graph image -->
+<!-- In a real implementation, you would create a 1200x630 PNG image showing your app's dashboard -->
+<!-- For now, we'll create a simple text placeholder that you should replace with an actual image -->
+
+This file should be replaced with an actual Open Graph image (1200x630 pixels) showing:
+- Smart Pantry logo
+- Dashboard screenshot or mockup
+- Key value propositions like "Reduce Food Waste by 40%"
+- Modern, clean design with your brand colors

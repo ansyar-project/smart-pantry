@@ -7,6 +7,17 @@ import { InventorySummary } from "@/components/inventory/InventorySummary";
 import { AddItemButton } from "@/components/inventory/AddItemButton";
 import { PageHeader } from "@/components/ui/page-header";
 import { ScanButton } from "@/components/ui/scan-button";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Food Inventory - Track Your Pantry Items",
+  description:
+    "Manage your complete food inventory with barcode scanning, expiry tracking, and smart organization. Keep track of all your pantry, fridge, and freezer items.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 interface InventoryPageProps {
   searchParams: Promise<{

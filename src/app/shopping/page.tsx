@@ -5,6 +5,17 @@ import { PageHeader } from "@/components/ui/page-header";
 import { ShoppingList } from "@/components/shopping/ShoppingList";
 import { GenerateListButton } from "@/components/shopping/GenerateListButton";
 import { ScanButton } from "@/components/ui/scan-button";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Smart Shopping List - Auto-Generated from Your Pantry",
+  description:
+    "Never forget what to buy again. Our AI-powered shopping list automatically suggests items based on your consumption patterns and current pantry inventory.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function ShoppingPage() {
   const session = await auth();

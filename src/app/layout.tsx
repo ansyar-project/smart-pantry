@@ -18,22 +18,33 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Smart Pantry",
-    template: "%s | Smart Pantry",
+    default: "Smart Pantry - Intelligent Food Management & Recipe Discovery",
+    template: "%s | Smart Pantry - Reduce Food Waste & Find Recipes",
   },
   description:
-    "Track pantry inventory, prevent food waste, and get personalized recipe recommendations based on available ingredients.",
+    "Smart Pantry helps you track food inventory, reduce food waste by 40%, and discover personalized recipes based on available ingredients. Barcode scanning, expiry alerts, and meal planning made simple.",
   keywords: [
-    "pantry",
-    "inventory",
-    "recipes",
-    "food waste",
-    "meal planning",
+    "smart pantry",
+    "food inventory management",
+    "reduce food waste",
+    "recipe recommendations",
+    "meal planning app",
     "barcode scanner",
+    "grocery tracker",
+    "kitchen organization",
+    "ingredient-based recipes",
+    "food expiry alerts",
+    "pantry organizer",
+    "sustainable cooking",
+    "household food management",
+    "digital pantry",
+    "recipe discovery",
   ],
-  authors: [{ name: "Smart Pantry Team" }],
+  authors: [{ name: "Smart Pantry Team", url: "https://smart-pantry.app" }],
   creator: "Smart Pantry",
   publisher: "Smart Pantry",
+  category: "Food & Drink",
+  classification: "Food Management Application",
   formatDetection: {
     email: false,
     address: false,
@@ -43,33 +54,39 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "/",
-    title: "Smart Pantry & Recipe Orchestrator",
+    title: "Smart Pantry - Intelligent Food Management & Recipe Discovery",
     description:
-      "Track pantry inventory, prevent food waste, and get personalized recipe recommendations",
+      "Reduce food waste by 40% with smart inventory tracking, expiry alerts, and personalized recipe recommendations. Transform your kitchen into an organized, sustainable cooking space.",
     siteName: "Smart Pantry",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Smart Pantry - Intelligent Food Management",
+        alt: "Smart Pantry - Intelligent Food Management Dashboard showing inventory tracking and recipe recommendations",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Smart Pantry & Recipe Orchestrator",
+    site: "@SmartPantryApp",
+    creator: "@SmartPantryApp",
+    title: "Smart Pantry - Intelligent Food Management & Recipe Discovery",
     description:
-      "Track pantry inventory, prevent food waste, and get personalized recipe recommendations",
+      "Reduce food waste by 40% with smart inventory tracking, expiry alerts, and personalized recipe recommendations.",
     images: ["/og-image.png"],
   },
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
@@ -80,9 +97,23 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512x512.png", sizes: "512x512", type: "image/png" },
+    ],
     shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "default",
+    "theme-color": "#3b82f6",
+    "msapplication-TileColor": "#3b82f6",
+    "application-name": "Smart Pantry",
   },
 };
 
@@ -97,8 +128,43 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "Smart Pantry",
+    description: "Intelligent food management and recipe discovery application",
+    url: process.env.NEXTAUTH_URL || "http://localhost:3000",
+    applicationCategory: "Food & Drink",
+    operatingSystem: "Web Browser",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+    author: {
+      "@type": "Organization",
+      name: "Smart Pantry Team",
+    },
+    featureList: [
+      "Food inventory tracking",
+      "Barcode scanning",
+      "Recipe recommendations",
+      "Food waste reduction",
+      "Expiry alerts",
+      "Meal planning",
+    ],
+  };
+
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

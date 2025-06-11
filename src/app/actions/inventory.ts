@@ -17,9 +17,10 @@ export async function scanBarcode(
 ): Promise<BarcodeProduct | null> {
   try {
     // Query OpenFoodFacts API
-    const response = await fetch(
-      `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`
-    );
+    const apiUrl =
+      process.env.OPENFOODFACTS_API_URL ||
+      "https://world.openfoodfacts.org/api/v0";
+    const response = await fetch(`${apiUrl}/product/${barcode}.json`);
     const data = await response.json();
 
     if (data.status === 1 && data.product) {

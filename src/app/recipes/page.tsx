@@ -6,6 +6,17 @@ import { RecipeFilters } from "@/components/recipes/RecipeFilters";
 import { CreateRecipeButton } from "@/components/recipes/CreateRecipeButton";
 import { PageHeader } from "@/components/ui/page-header";
 import { ScanButton } from "@/components/ui/scan-button";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Recipe Discovery - Find Recipes Based on Your Ingredients",
+  description:
+    "Discover personalized recipes based on your available pantry ingredients. Reduce food waste and create delicious meals with what you already have.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 interface RecipesPageProps {
   searchParams: Promise<{

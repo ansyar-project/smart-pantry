@@ -9,6 +9,17 @@ import { RecipeSuggestions } from "@/components/dashboard/RecipeSuggestions";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { AlertNotifications } from "@/components/dashboard/AlertNotifications";
 import { QuickActions } from "@/components/dashboard/QuickActions";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard - Your Smart Pantry Overview",
+  description:
+    "View your complete food inventory overview, expiry alerts, recipe suggestions, and quick pantry management actions all in one place.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function DashboardPage() {
   const session = await auth();
