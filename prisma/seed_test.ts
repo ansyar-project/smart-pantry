@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, FoodCategory, StorageLocation } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -41,8 +41,8 @@ async function main() {
     {
       name: "Whole Milk",
       brand: "Organic Valley",
-      category: "DAIRY",
-      location: "REFRIGERATOR",
+      category: FoodCategory.DAIRY,
+      location: StorageLocation.REFRIGERATOR,
       quantity: 1,
       unit: "gallon",
       expiryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
@@ -52,8 +52,8 @@ async function main() {
     },
     {
       name: "Bananas",
-      category: "PRODUCE",
-      location: "PANTRY",
+      category: FoodCategory.PRODUCE,
+      location: StorageLocation.PANTRY,
       quantity: 6,
       unit: "pieces",
       expiryDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days from now
@@ -62,8 +62,8 @@ async function main() {
     },
     {
       name: "Chicken Breast",
-      category: "MEAT",
-      location: "FREEZER",
+      category: FoodCategory.MEAT,
+      location: StorageLocation.FREEZER,
       quantity: 2,
       unit: "lbs",
       expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
@@ -73,8 +73,8 @@ async function main() {
     {
       name: "Bread",
       brand: "Wonder Bread",
-      category: "GRAINS",
-      location: "PANTRY",
+      category: FoodCategory.GRAINS,
+      location: StorageLocation.PANTRY,
       quantity: 1,
       unit: "loaf",
       expiryDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days from now - expires soon
@@ -84,8 +84,8 @@ async function main() {
     {
       name: "Olive Oil",
       brand: "Bertolli",
-      category: "CONDIMENTS",
-      location: "PANTRY",
+      category: FoodCategory.CONDIMENTS,
+      location: StorageLocation.PANTRY,
       quantity: 1,
       unit: "bottle",
       expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year from now
@@ -95,8 +95,8 @@ async function main() {
     {
       name: "Expired Yogurt",
       brand: "Dannon",
-      category: "DAIRY",
-      location: "REFRIGERATOR",
+      category: FoodCategory.DAIRY,
+      location: StorageLocation.REFRIGERATOR,
       quantity: 1,
       unit: "container",
       expiryDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago - expired
