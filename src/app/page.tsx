@@ -159,7 +159,7 @@ export default async function HomePage() {
               </span>
             </h1>
 
-            <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed animate-fade-in">
+            <p className="text-xl text-foreground/80 mb-8 max-w-3xl mx-auto leading-relaxed animate-fade-in">
               Transform your kitchen with intelligent inventory tracking, smart
               expiry alerts, and personalized recipe recommendations that reduce
               waste and inspire creativity.
@@ -190,7 +190,7 @@ export default async function HomePage() {
             </div>
 
             {/* Social proof */}
-            <div className="mt-12 flex items-center justify-center gap-2 text-muted-foreground animate-fade-in">
+            <div className="mt-12 flex items-center justify-center gap-2 text-foreground/70 animate-fade-in">
               <div className="flex">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="h-4 w-4 fill-warning text-warning" />
@@ -220,7 +220,7 @@ export default async function HomePage() {
                 smarter kitchen
               </span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-foreground/80 max-w-2xl mx-auto">
               Discover how Smart Pantry transforms the way you manage food,
               reduce waste, and create delicious meals.
             </p>
@@ -237,7 +237,7 @@ export default async function HomePage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-base leading-relaxed">
+                <CardDescription className="text-base leading-relaxed text-foreground/75">
                   Instantly add items with AI-powered barcode scanning.
                   Automatic product recognition saves time and ensures accuracy.
                 </CardDescription>
@@ -254,7 +254,7 @@ export default async function HomePage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-base leading-relaxed">
+                <CardDescription className="text-base leading-relaxed text-foreground/75">
                   Proactive alerts prevent food waste. Smart notifications
                   remind you to use items before they expire.
                 </CardDescription>
@@ -271,7 +271,7 @@ export default async function HomePage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-base leading-relaxed">
+                <CardDescription className="text-base leading-relaxed text-foreground/75">
                   AI-powered recipe suggestions based on your current inventory.
                   Discover new dishes with ingredients you already have.
                 </CardDescription>
@@ -286,7 +286,7 @@ export default async function HomePage() {
                 <CardTitle className="text-xl font-bold">Family Sync</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-base leading-relaxed">
+                <CardDescription className="text-base leading-relaxed text-foreground/75">
                   Real-time collaboration for busy households. Share your pantry
                   with family members seamlessly.
                 </CardDescription>
@@ -304,7 +304,7 @@ export default async function HomePage() {
               <h3 className="text-3xl font-bold text-foreground">
                 Insights that drive smarter decisions
               </h3>
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <p className="text-lg text-foreground/80 leading-relaxed">
                 Track your consumption patterns, monitor waste reduction, and
                 optimize your shopping habits with detailed analytics and
                 personalized recommendations.
@@ -312,19 +312,19 @@ export default async function HomePage() {
               <ul className="space-y-3">
                 <li className="flex items-center gap-3">
                   <div className="h-2 w-2 bg-primary rounded-full"></div>
-                  <span className="text-muted-foreground">
+                  <span className="text-foreground/75">
                     Consumption tracking and patterns
                   </span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="h-2 w-2 bg-success rounded-full"></div>
-                  <span className="text-muted-foreground">
+                  <span className="text-foreground/75">
                     Waste reduction metrics
                   </span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="h-2 w-2 bg-info rounded-full"></div>
-                  <span className="text-muted-foreground">
+                  <span className="text-foreground/75">
                     Smart shopping suggestions
                   </span>
                 </li>
@@ -338,7 +338,7 @@ export default async function HomePage() {
                     <div className="text-2xl font-bold text-primary mb-2">
                       85%
                     </div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-sm text-foreground/70">
                       Waste Reduction
                     </div>
                   </div>
@@ -346,7 +346,7 @@ export default async function HomePage() {
                     <div className="text-2xl font-bold text-success mb-2">
                       $240
                     </div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-sm text-foreground/70">
                       Monthly Savings
                     </div>
                   </div>
@@ -354,7 +354,7 @@ export default async function HomePage() {
                     <div className="text-2xl font-bold text-info mb-2">
                       150+
                     </div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-sm text-foreground/70">
                       Recipe Matches
                     </div>
                   </div>
@@ -362,7 +362,7 @@ export default async function HomePage() {
                     <div className="text-2xl font-bold text-warning mb-2">
                       98%
                     </div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-sm text-foreground/70">
                       User Satisfaction
                     </div>
                   </div>
@@ -389,7 +389,7 @@ export default async function HomePage() {
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
                 Ready to revolutionize your kitchen?
               </h2>
-              <p className="text-xl text-white/90 mb-8 leading-relaxed">
+              <p className="text-xl text-white mb-8 leading-relaxed">
                 Join thousands of smart households who have reduced food waste
                 by 85% and discovered amazing new recipes while saving money.
               </p>
@@ -407,7 +407,7 @@ export default async function HomePage() {
                   </Link>
                 </Button>
 
-                <div className="flex items-center gap-4 text-white/80 text-sm">
+                <div className="flex items-center gap-4 text-white text-sm">
                   <div className="flex items-center gap-2">
                     <div className="h-2 w-2 bg-white rounded-full"></div>
                     <span>Free to start</span>
@@ -429,12 +429,12 @@ export default async function HomePage() {
                     />
                   ))}
                 </div>
-                <blockquote className="text-white/90 text-lg italic mb-3">
+                <blockquote className="text-white text-lg italic mb-3">
                   &ldquo;Smart Pantry has completely transformed how we manage
                   food in our household. We&apos;ve cut our food waste in half
                   and discovered so many new recipes!&rdquo;
                 </blockquote>
-                <cite className="text-white/70 text-sm">
+                <cite className="text-white/85 text-sm">
                   — Sarah M., Family of 4
                 </cite>
               </div>
@@ -456,7 +456,7 @@ export default async function HomePage() {
                   </div>
                   <span className="font-bold text-xl">Smart Pantry</span>
                 </div>
-                <p className="text-gray-400 leading-relaxed max-w-md">
+                <p className="text-gray-300 leading-relaxed max-w-md">
                   Revolutionizing kitchen management with AI-powered inventory
                   tracking, smart expiry alerts, and personalized recipe
                   recommendations.
@@ -466,7 +466,7 @@ export default async function HomePage() {
               {/* Quick Links */}
               <div>
                 <h3 className="font-semibold text-white mb-4">Product</h3>
-                <ul className="space-y-2 text-gray-400">
+                <ul className="space-y-2 text-gray-300">
                   <li>
                     <Link
                       href="#features"
@@ -505,7 +505,7 @@ export default async function HomePage() {
               {/* Support */}
               <div>
                 <h3 className="font-semibold text-white mb-4">Support</h3>
-                <ul className="space-y-2 text-gray-400">
+                <ul className="space-y-2 text-gray-300">
                   <li>
                     <Link
                       href="/help"
@@ -543,11 +543,11 @@ export default async function HomePage() {
             </div>
 
             <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between">
-              <p className="text-gray-400 text-sm">
+              <p className="text-gray-300 text-sm">
                 © 2024 Smart Pantry. Built with Next.js, Prisma, and PostgreSQL.
               </p>
               <div className="flex items-center gap-6 mt-4 md:mt-0">
-                <div className="flex items-center gap-2 text-gray-400 text-sm">
+                <div className="flex items-center gap-2 text-gray-300 text-sm">
                   <div className="h-2 w-2 bg-success rounded-full"></div>
                   <span>All systems operational</span>
                 </div>
