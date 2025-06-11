@@ -92,23 +92,25 @@ export function AddItemButton() {
     try {
       // Get or create default pantry
       const pantry = await getOrCreateDefaultPantry();
-
       const itemData = {
         name: formData.name,
-        brand: formData.brand || undefined,
+        brand: formData.brand || null,
         category: formData.category as FoodCategory,
         location: (formData.location as StorageLocation) || "PANTRY",
         quantity: parseFloat(formData.quantity),
         unit: formData.unit,
-        expiryDate: formData.expiryDate
-          ? new Date(formData.expiryDate)
-          : undefined,
+        expiryDate: formData.expiryDate ? new Date(formData.expiryDate) : null,
         purchaseDate: formData.purchaseDate
           ? new Date(formData.purchaseDate)
-          : undefined,
-        price: formData.price ? parseFloat(formData.price) : undefined,
-        notes: formData.notes || undefined,
+          : null,
+        price: formData.price ? parseFloat(formData.price) : null,
+        notes: formData.notes || null,
         pantryId: pantry.id,
+        barcode: null,
+        openedDate: null,
+        currency: "USD",
+        imageUrl: null,
+        nutritionData: null,
       };
 
       const result = await addPantryItem(itemData);
