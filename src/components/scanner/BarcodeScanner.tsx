@@ -8,7 +8,6 @@ import { scanBarcode } from "@/app/actions/inventory";
 import { ProductForm } from "./ProductForm";
 import type { BarcodeProduct } from "@/types";
 
-// @ts-expect-error - Quagga types not available
 import Quagga from "quagga";
 
 export function BarcodeScanner() {

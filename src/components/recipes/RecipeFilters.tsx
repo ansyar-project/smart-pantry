@@ -76,18 +76,6 @@ export function RecipeFilters() {
   });
 
   const [searchValue, setSearchValue] = useState(filters.query);
-
-  // Debounce search input
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (searchValue !== filters.query) {
-        handleFilterChange("query", searchValue);
-      }
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [searchValue]);
-
   const updateURL = useCallback(
     (newFilters: typeof filters) => {
       const params = new URLSearchParams();
@@ -105,11 +93,25 @@ export function RecipeFilters() {
     [router]
   );
 
-  const handleFilterChange = (key: string, value: string) => {
-    const newFilters = { ...filters, [key]: value };
-    setFilters(newFilters);
-    updateURL(newFilters);
-  };
+  const handleFilterChange = useCallback(
+    (key: string, value: string) => {
+      const newFilters = { ...filters, [key]: value };
+      setFilters(newFilters);
+      updateURL(newFilters);
+    },
+    [filters, updateURL]
+  );
+
+  // Debounce search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchValue !== filters.query) {
+        handleFilterChange("query", searchValue);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchValue, filters.query, handleFilterChange]);
 
   const clearFilters = () => {
     const clearedFilters = {

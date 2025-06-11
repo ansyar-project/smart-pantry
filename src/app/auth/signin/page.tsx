@@ -1,7 +1,7 @@
 "use client";
 
 import { getProviders, signIn, getCsrfToken } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,7 @@ interface Provider {
   callbackUrl: string;
 }
 
-export default function SignIn() {
+function SignInContent() {
   const [providers, setProviders] = useState<Record<string, Provider> | null>(
     null
   );
@@ -118,7 +118,6 @@ export default function SignIn() {
               {getErrorMessage(error)}
             </div>
           )}
-
           {/* OAuth Providers */}
           {Object.values(providers)
             .filter((provider) => provider.type === "oauth")
@@ -141,7 +140,6 @@ export default function SignIn() {
                 Sign in with {provider.name}
               </Button>
             ))}
-
           {/* Email Provider */}
           {providers.email && (
             <>
@@ -195,14 +193,21 @@ export default function SignIn() {
               </form>
             </>
           )}
-
           <div className="text-center text-sm text-gray-600">
             <Link href="/" className="text-blue-600 hover:text-blue-500">
               ← Back to home
             </Link>
-          </div>
+          </div>{" "}
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function SignIn() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignInContent />
+    </Suspense>
   );
 }

@@ -22,6 +22,7 @@ import {
 import { Plus, X, Clock, ChefHat, Loader2 } from "lucide-react";
 import { createRecipe } from "@/app/actions/recipes";
 import type { CreateRecipeInput, RecipeIngredient } from "@/types";
+import { RecipeCategory, Difficulty } from "@prisma/client";
 
 export function CreateRecipeButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -104,8 +105,8 @@ export function CreateRecipeButton() {
         userId: null, // Will be set by the server action
         name: formData.title,
         description: formData.description,
-        category: formData.category as any,
-        difficulty: formData.difficulty as any,
+        category: formData.category as RecipeCategory,
+        difficulty: formData.difficulty as Difficulty,
         prepTime: parseInt(formData.prepTime),
         cookTime: parseInt(formData.cookTime),
         servings: parseInt(formData.servings),

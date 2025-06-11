@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { Suspense } from "react";
 import {
   Card,
   CardContent,
@@ -12,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Mail } from "lucide-react";
 
-export default function VerifyRequest() {
+function VerifyRequestContent() {
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
 
@@ -45,7 +46,6 @@ export default function VerifyRequest() {
               </ul>
             </div>
           </div>
-
           <div className="text-center space-y-2">
             <p className="text-sm text-gray-600">
               Didn&apos;t receive the email?
@@ -54,14 +54,21 @@ export default function VerifyRequest() {
               <Link href="/auth/signin">Try signing in again</Link>
             </Button>
           </div>
-
           <div className="text-center text-sm text-gray-600">
             <Link href="/" className="text-blue-600 hover:text-blue-500">
               ← Back to home
             </Link>
-          </div>
+          </div>{" "}
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function VerifyRequest() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerifyRequestContent />
+    </Suspense>
   );
 }

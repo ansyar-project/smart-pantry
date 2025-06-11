@@ -42,7 +42,8 @@ export function ProductForm({ initialData }: ProductFormProps) {
         purchaseDate: formData.purchaseDate
           ? new Date(formData.purchaseDate)
           : null,
-        nutritionData: initialData?.nutritionData || null,
+        nutritionData: (initialData?.nutritionData ||
+          null) as import("@prisma/client").Prisma.JsonValue,
         openedDate: null,
         currency: "USD",
       });

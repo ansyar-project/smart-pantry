@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { Suspense } from "react";
 import {
   Card,
   CardContent,
@@ -12,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
 
-export default function AuthError() {
+function AuthErrorContent() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
 
@@ -160,8 +161,42 @@ export default function AuthError() {
               contact support
             </a>
           </div>
+        </CardContent>{" "}
+      </Card>
+    </div>
+  );
+}
+
+// Loading fallback component
+function AuthErrorLoading() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-1 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
+            <div className="h-6 w-6 bg-gray-300 rounded animate-pulse" />
+          </div>
+          <div className="h-8 bg-gray-200 rounded animate-pulse mx-8" />
+          <div className="h-4 bg-gray-200 rounded animate-pulse mx-12" />
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="rounded-md bg-gray-50 p-4">
+            <div className="h-4 bg-gray-200 rounded animate-pulse" />
+          </div>
+          <div className="space-y-2">
+            <div className="h-10 bg-gray-200 rounded animate-pulse" />
+            <div className="h-10 bg-gray-200 rounded animate-pulse" />
+          </div>
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function AuthError() {
+  return (
+    <Suspense fallback={<AuthErrorLoading />}>
+      <AuthErrorContent />
+    </Suspense>
   );
 }
